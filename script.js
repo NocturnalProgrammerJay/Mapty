@@ -44,3 +44,4 @@ if (navigator.geolocation)
     }) 
 
     //CDN = content delivery network
+    //git note 
