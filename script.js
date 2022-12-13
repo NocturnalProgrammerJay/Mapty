@@ -13,18 +13,18 @@ class Workout {
     this.duration = duration; // in min
   }
 
-  _setDescription() {
-    // prettier-ignore
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  // _setDescription() {
+//     // prettier-ignore
+//     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
-      months[this.date.getMonth()]
-    } ${this.date.getDate()}`;
-  }
+//     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
+//       months[this.date.getMonth()]
+//     } ${this.date.getDate()}`;
+//   }
 
-  click() {
-    this.clicks++;
-  }
+//   click() {
+//     this.clicks++;
+//   }
 }
 
 class Running extends Workout {
@@ -33,16 +33,16 @@ class Running extends Workout {
   constructor(coords, distance, duration, cadence) {
     super(coords, distance, duration);
     this.cadence = cadence;
-    this.calcPace();
-    this._setDescription();
+    // this.calcPace();
+    // this._setDescription();
   }
 
-  calcPace() {
-    // min/km
-    this.pace = this.duration / this.distance;
-    return this.pace;
+//   calcPace() {
+//     // min/km
+//     this.pace = this.duration / this.distance;
+//     return this.pace;
+//   }
   }
-}
 
 class Cycling extends Workout {
   type = 'cycling';
@@ -51,15 +51,15 @@ class Cycling extends Workout {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
     // this.type = 'cycling';
-    this.calcSpeed();
-    this._setDescription();
+    // this.calcSpeed();
+    // this._setDescription();
   }
 
-  calcSpeed() {
-    // km/h
-    this.speed = this.distance / (this.duration / 60);
-    return this.speed;
-  }
+  // calcSpeed() {
+  //   // km/h
+  //   this.speed = this.distance / (this.duration / 60);
+  //   return this.speed;
+  // }
 }
 
 // const run1 = new Running([39, -12], 5.2, 24, 178);
@@ -83,22 +83,22 @@ class App {
   #workouts = [];
 
   constructor() {
-    // Get user's position
+    // Get user's position when the page renders
     this._getPosition();
 
     // Get data from local storage
-    this._getLocalStorage();
+    // this._getLocalStorage();
 
     // Attach event handlers
-    form.addEventListener('submit', this._newWorkout.bind(this));
+    form.addEventListener('submit', this._newWorkout.bind(this)); //this first this refers to form, the second this refers to app
     inputType.addEventListener('change', this._toggleElevationField);
-    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    // containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
 
   _getPosition() {
-    if (navigator.geolocation)
+    if (navigator.geolocation) // Window Navigator object
       navigator.geolocation.getCurrentPosition(
-        this._loadMap.bind(this),
+        this._loadMap.bind(this), //second this is referring to navigator geolocation object
         function () {
           alert('Could not get your position');
         }
@@ -106,13 +106,17 @@ class App {
   }
 
   _loadMap(position) {
+    //position is referred to as geolocationPosition object from the navigator object 
     const { latitude } = position.coords;
     const { longitude } = position.coords;
     // console.log(`https://www.google.pt/maps/@${latitude},${longitude}`);
 
     const coords = [latitude, longitude];
 
-    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel); 
+    // L = namespace variable from leaflet library 
+    // second map is a method from leaflet library as well 
+    //this variable gives the page a map for the user to see
 
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
@@ -144,6 +148,7 @@ class App {
   }
 
   _toggleElevationField() {
+    //event listener on select fields from form. By default running is viewable and cycling is hidden until user makes a selection
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
   }
@@ -156,10 +161,12 @@ class App {
     e.preventDefault();
 
     // Get data from form
+    // + is for string to number conversions 
     const type = inputType.value;
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
     const { lat, lng } = this.#mapEvent.latlng;
+
     let workout;
 
     // If workout running, create running object
@@ -300,9 +307,9 @@ class App {
     // workout.click();
   }
 
-  _setLocalStorage() {
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
-  }
+  // _setLocalStorage() {
+  //   localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  // }
 
   _getLocalStorage() {
     const data = JSON.parse(localStorage.getItem('workouts'));
@@ -322,4 +329,5 @@ class App {
   }
 }
 
+//App instance 
 const app = new App();
