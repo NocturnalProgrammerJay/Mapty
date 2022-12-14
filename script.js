@@ -1,8 +1,19 @@
 'use strict';
+//CHALLENGES
+//edit, delete, delete all workouts from the users interface
+//sort workouts by fields
+//rebuild - local storage objects
+//build realistic error and confirmation message
+
+//ability to position the map and show all workouts [very hard]
+//Draw lines and shapes instead of makers
+//geocode takes in a description 
+//display weather data for workout time and place 
+
 
 class Workout {
   date = new Date();
-  id = (Date.now() + '').slice(-10);
+  id = (Date.now() + '').slice(-10); //gives a unique number 
   clicks = 0;
 
   constructor(coords, distance, duration) {
@@ -80,19 +91,19 @@ class App {
   #map;
   #mapZoomLevel = 13;
   #mapEvent;
-  #workouts = [];
+  #workouts = []; // for array of objects 
 
   constructor() {
     // Get user's position when the page renders
     this._getPosition();
 
     // Get data from local storage
-    // this._getLocalStorage();
+    this._getLocalStorage();
 
     // Attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this)); //this first this refers to form, the second this refers to app (current object)
     inputType.addEventListener('change', this._toggleElevationField);
-    // containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
 
   _getPosition() {
@@ -127,6 +138,8 @@ class App {
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
 
+    //This method must be called here because we need the map to be render first. 
+    //If workouts is empty then this wont execute 
     this.#workouts.forEach(work => {
       this._renderWorkoutMarker(work);
     });
@@ -202,6 +215,8 @@ class App {
 
       workout = new Cycling([lat, lng], distance, duration, elevation); //passing an array of coordinates and other variables
     }
+
+    //newWorkout method does delegation  - creates objects and then delegate functionality to other methods(below)
 
     // Add new object to workout array
     this.#workouts.push(workout);
@@ -299,15 +314,20 @@ class App {
     // BUGFIX: When we click on a workout before the map has loaded, we get an error. But there is an easy fix:
     if (!this.#map) return;
 
-    const workoutEl = e.target.closest('.workout'); //e is the event property from app and the target is app, and closet selects the closet parent element with selected class name
+    //e is the event property from app and the target is app, and closet selects the closet parent element with selected class name
+    //selects the closet workout element but li's only appear when an workout is created by the user else returns null 
+    const workoutEl = e.target.closest('.workout'); 
 
+    //guard clause
     if (!workoutEl) return;
 
+    //.dataset set is how you access a elements data attributes and data-id targets the specific data attributes.
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
 
-    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+    //setView - leaflet library method
+    this.#map.setView(workout.coords, this.#mapZoomLevel, { //controls users map POV
       animate: true,
       pan: {
         duration: 1,
@@ -318,25 +338,41 @@ class App {
     // workout.click();
   }
 
-  // _setLocalStorage() {
-  //   localStorage.setItem('workouts', JSON.stringify(this.#workouts));
-  // }
+  _setLocalStorage() {
+    //localStorage is a API from the browser that we can use, should use small amount of data.
+    //localStorage a simple key:value store, both must be strings. A map or you can say array of dictionaries
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+    //In other words store this key value pair to the localStorage in json string format
+    //check -> go to url> webTools > applications tab > local storage
+  }
 
   _getLocalStorage() {
-    const data = JSON.parse(localStorage.getItem('workouts'));
+    /**
+     * JSON. parse() is used for parsing data that was received as JSON; it deserializes a JSON string into a JavaScript object.
+     * JSON. stringify() on the other hand is used to create a JSON string out of an object or array; it serializes a JavaScript object into a JSON string.
+     */
+
+    const data = JSON.parse(localStorage.getItem('workouts')); //pull from user localStorage API (array of dictionaries)
+    //objects that were return lost their prototype chain and no longer an object of the running or cycling class. Therefore can't inherit any of their methods. 
+    //only have basic methods that any object will have. fix by restoring objects in a for loop
+    console.log(data);
 
     if (!data) return;
-
-    this.#workouts = data;
+    
+    //if user had workouts in localStorage then this the first time the #workouts property is used.
+    //new workouts will be appended to this list by the user 
+    this.#workouts = data; 
 
     this.#workouts.forEach(work => {
+      //populate workout objects to the list (HTML)
       this._renderWorkout(work);
     });
   }
 
   reset() {
     localStorage.removeItem('workouts');
-    location.reload();
+    location.reload();//reloads page 
+    //console -> app.reset()
   }
 }
 
