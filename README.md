@@ -29,33 +29,7 @@ The following technologies were used to build this application:
 - [insert library name]
 - [insert API name]
 
-## Installation 
-
-To run the application, follow these steps: 
-
-1. Clone the repository to your local machine
-2. Install the necessary dependencies using [insert package manager name]
-3. Run the application using [insert command to start the app]
-
-## Future Improvements 
-
-There are several improvements planned for future versions of this application, including: 
-
-- Integration with [insert social media platform name] to allow users to share their marked areas with friends
-- More customization options for marking areas (e.g., different colors, shapes)
-- Integration with fitness tracking APIs to allow users to track their workouts within the app
-- Improved user interface and user experience.
-
-## Credits
-
-This project was created as a part of the "Advanced JavaScript" course on Udemy, instructed by [insert instructor name]. Special thanks to [insert external library/API name] for providing their library/API for this project.
-
-## License
-
-This project is licensed under the [insert license name] license. See the LICENSE file for more details.
-
 To view the application, click [here](https://nocturnalprogrammerjay.github.io/Omnifood/).
-
 
 ![Mapty-flowchart](https://user-images.githubusercontent.com/96387037/211727636-d51011ac-0fa0-4470-bcc2-35cb9c486ae0.png)
 
