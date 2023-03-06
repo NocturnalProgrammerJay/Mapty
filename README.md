@@ -23,9 +23,9 @@ The following technologies were used to build this application:
 - HTML
 - CSS
 - JavaScript
-- Leafly
-- Geolocation
-- LocalStorage
+- Leafly API
+- Geolocation webAPI
+- LocalStorage jsAPI
 
 To view the application, click [here](https://nocturnalprogrammerjay.github.io/Omnifood/).
 
