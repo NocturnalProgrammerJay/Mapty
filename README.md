@@ -1,5 +1,4 @@
-# Mapty
-# Geolocation Application
+# Mapty - Geolocation Application
 
 This is a web application that allows users to mark areas where they can go running or cycling using their device's geolocation. The app is built using advanced JavaScript techniques, external libraries, and web APIs. 
 
